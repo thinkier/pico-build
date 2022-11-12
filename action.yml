@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Fetch build dependencies
       shell: bash
-      run: apt-get update; apt-get install --yes python3 git cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential libstdc++-arm-none-eabi-newlib; rm -rf /var/apt/cache
+      run: sudo apt-get update; sudo apt-get install --yes python3 git cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential libstdc++-arm-none-eabi-newlib; sudo rm -rf /var/apt/cache
     - name: Fetch Official SDK
       working-directory: ..
       shell: bash
