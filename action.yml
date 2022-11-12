@@ -45,7 +45,6 @@ runs:
       shell: bash
       run: make
     - name: Upload Artifact
-      shell: bash
       uses: actions/upload-artifact@v3
       with:
         path: '*.uf2'
