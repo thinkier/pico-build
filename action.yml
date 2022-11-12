@@ -1,0 +1,35 @@
+name: 'Build for Pico'
+description: 'Build the current application for Raspberry Pi Pico'
+inputs:
+  pimoroni-pico:
+    description: 'Use pimoroni-pico in addition to the Official SDK.'
+    required: false
+    default: 'true'
+outputs:
+  uf2:
+    description: 'The flash-ready build artifact.'
+    value: ${{ steps.build.outputs.uf2 }}
+runs:
+  using: composite
+  steps:
+    - name: Fetch build dependencies
+      shell: bash
+      run: apt-get update; apt-get install --yes python3 git cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential libstdc++-arm-none-eabi-newlib; rm -rf /var/apt/cache
+    - name: Fetch Official SDK
+      working-directory: ..
+      shell: bash
+      run: git clone https://github.com/raspberrypi/pico-sdk; cd pico-sdk; git submodule update --init --recursive
+    - name: Fetch pimoroni-pico
+      if: inputs.pimoroni-pico == "true"
+      working-directory: ..
+      shell: bash
+      run: git clone https://github.com/pimoroni/pimoroni-pico; cd pimoroni-pico; git submodule update --init --recursive
+    - name: Initialize build with CMake
+      shell: bash
+      run: cmake .
+    - name: Build with Make
+      shell: bash
+      run: make
+    - name: DEBUG - Recursive ls
+      shell: bash
+      run: ls -larR
