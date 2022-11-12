@@ -6,6 +6,10 @@ inputs:
     description: 'Use the library pimoroni-pico in addition to the Official SDK.'
     required: false
     default: 'true'
+  pimoroni-pico-vendor:
+    description: 'Use a custom fork of pimoroni-pico (like `thinkier`)'
+    required: false
+    default: 'pimoroni'
 
 runs:
   using: composite
@@ -24,7 +28,7 @@ runs:
       if: ${{ inputs.pimoroni-pico == 'true'}}
       working-directory: ..
       shell: bash
-      run: git clone https://github.com/pimoroni/pimoroni-pico; cd pimoroni-pico; git submodule update --init --recursive
+      run: git clone "https://github.com/${{ inputs.pimoroni-pico-vendor }}/pimoroni-pico"; cd pimoroni-pico; git submodule update --init --recursive
     # Build using cmake and make
     - name: Initialize build with CMake
       shell: bash
