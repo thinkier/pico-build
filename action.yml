@@ -15,12 +15,26 @@ runs:
     - name: Fetch build dependencies
       shell: bash
       run: sudo apt-get update; sudo apt-get install --yes python3 git cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential libstdc++-arm-none-eabi-newlib; sudo rm -rf /var/apt/cache
-    - name: Fetch Official SDK
+    - name: Cache Official SDK
+      id: cache-official-sdk
+      uses: actions/cache@v3
+      with:
+        path: ../pico-sdk
+        key: ${{ runner.os }}-official-sdk
+    - name: Clone Official SDK
+      if: ${{ steps.cache-official-sdk.outputs.cache-hit != 'true' }}
       working-directory: ..
       shell: bash
       run: git clone https://github.com/raspberrypi/pico-sdk; cd pico-sdk; git submodule update --init --recursive
-    - name: Fetch pimoroni-pico
+    - name: Cache pimoroni-pico
       if: ${{ inputs.pimoroni-pico == 'true' }}
+      id: cache-pimoroni-pico
+      uses: actions/cache@v3
+      with:
+        path: ../pimoroni-pico
+        key: ${{ runner.os }}-pimoroni-pico
+    - name: Clone pimoroni-pico
+      if: ${{ inputs.pimoroni-pico == 'true' && steps.cache-pimoroni-pico.outputs.cache-hit != 'true'}}
       working-directory: ..
       shell: bash
       run: git clone https://github.com/pimoroni/pimoroni-pico; cd pimoroni-pico; git submodule update --init --recursive
@@ -30,6 +44,8 @@ runs:
     - name: Build with Make
       shell: bash
       run: make
-    - name: DEBUG - Recursive ls
+    - name: Upload Artifact
       shell: bash
-      run: ls -larR
+      uses: actions/upload-artifact@v3
+      with:
+        path: '*.uf2'
