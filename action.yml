@@ -20,7 +20,7 @@ runs:
       shell: bash
       run: git clone https://github.com/raspberrypi/pico-sdk; cd pico-sdk; git submodule update --init --recursive
     - name: Fetch pimoroni-pico
-      if: inputs.pimoroni-pico == "true"
+      if: ${{ inputs.pimoroni-pico == 'true' }}
       working-directory: ..
       shell: bash
       run: git clone https://github.com/pimoroni/pimoroni-pico; cd pimoroni-pico; git submodule update --init --recursive
