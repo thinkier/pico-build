@@ -43,4 +43,4 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: UF2 Artifact
-        path: '*.uf2'
+        path: '**/*.uf2'
