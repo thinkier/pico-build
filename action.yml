@@ -32,6 +32,8 @@ runs:
     # Build using cmake and make
     - name: Initialize build with CMake
       shell: bash
+      env:
+        PICO_SDK_PATH: ../pico-sdk
       run: cmake .
     - name: Build with Make
       shell: bash
